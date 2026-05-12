@@ -1,1 +1,1 @@
-# finance-super
+# finance-super-app
