@@ -697,6 +697,669 @@ alert('Username atau password salah ❌');
 </script>
 
 </body>
+ </html>flex-wrap:wrap;
+gap:20px;
+margin-bottom:30px;
+}
+
+.title{
+font-size:40px;
+font-weight:bold;
+}
+
+.card-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:20px;
+margin-bottom:25px;
+}
+
+.card,.section,#loginPage{
+background:rgba(255,255,255,0.08);
+backdrop-filter:blur(15px);
+padding:25px;
+border-radius:25px;
+box-shadow:0 8px 25px rgba(0,0,0,0.3);
+}
+
+.card{
+transition:0.3s;
+}
+
+.card:hover{
+transform:translateY(-5px);
+}
+
+.card h3{
+margin-bottom:10px;
+}
+
+.card p{
+font-size:30px;
+font-weight:bold;
+margin-top:10px;
+}
+
+input,select{
+width:100%;
+padding:14px;
+border:none;
+border-radius:15px;
+margin-top:10px;
+outline:none;
+font-size:16px;
+}
+
+button{
+padding:14px 22px;
+border:none;
+border-radius:15px;
+background:#38bdf8;
+color:white;
+font-weight:bold;
+cursor:pointer;
+transition:0.3s;
+margin-top:10px;
+}
+
+button:hover{
+transform:scale(1.05);
+}
+
+.section{
+margin-top:25px;
+}
+
+.transaction{
+background:rgba(255,255,255,0.08);
+padding:15px;
+border-radius:15px;
+margin-top:10px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:10px;
+}
+
+.progress{
+width:100%;
+height:22px;
+background:rgba(255,255,255,0.1);
+border-radius:20px;
+overflow:hidden;
+margin-top:15px;
+}
+
+.progress-bar{
+height:100%;
+width:0%;
+background:linear-gradient(90deg,#06b6d4,#8b5cf6);
+transition:0.5s;
+}
+
+.notification{
+position:fixed;
+top:20px;
+right:20px;
+padding:15px 20px;
+background:#22c55e;
+border-radius:15px;
+display:none;
+z-index:999;
+}
+
+.ai-box{
+background:rgba(0,0,0,0.2);
+padding:15px;
+border-radius:15px;
+margin-top:15px;
+min-height:100px;
+white-space:pre-wrap;
+}
+
+.money{
+position:fixed;
+top:-50px;
+font-size:25px;
+animation:fall linear forwards;
+}
+
+@keyframes fall{
+to{
+transform:translateY(120vh);
+}
+}
+
+canvas{
+background:white;
+padding:10px;
+border-radius:20px;
+margin-top:20px;
+width:100% !important;
+}
+
+#loginPage{
+max-width:400px;
+margin:80px auto;
+text-align:center;
+}
+
+@media(max-width:768px){
+.title{
+font-size:28px;
+}
+
+.card p{
+font-size:24px;
+}
+}
+</style>
+</head>
+<body>
+
+<div id="loginPage" style="max-width:400px;margin:80px auto;background:rgba(255,255,255,0.08);padding:30px;border-radius:25px;backdrop-filter:blur(15px);text-align:center;">
+<h1 style="margin-bottom:20px;">🔐 Login</h1>
+
+<input type="text" id="username" placeholder="Username">
+<input type="password" id="password" placeholder="Password">
+
+<button onclick="login()" style="width:100%;margin-top:15px;">Masuk 🚀</button>
+</div>
+
+<div id="app" style="display:none;">
+
+<div class="notification" id="notif"></div>
+
+<div class="container">
+
+<div class="header">
+<div>
+<h1 class="title">✨ Cute AI Finance Super App</h1>
+<p>Aplikasi keuangan futuristik dengan AI pintar 🚀</p>
+</div>
+
+<button onclick="toggleMode()">🌙 Toggle Mode</button>
+</div>
+
+<div class="card-grid">
+
+<div class="card">
+<h3>💎 Total Saldo</h3>
+<p id="saldo">Rp 0</p>
+</div>
+
+<div class="card">
+<h3>🎮 Level</h3>
+<p id="level">1</p>
+</div>
+
+<div class="card">
+<h3>🪙 Coin</h3>
+<p id="coin">0</p>
+</div>
+
+</div>
+
+<div class="section">
+<h2>➕ Tambah Transaksi</h2>
+
+<input type="text" id="nama" placeholder="Nama transaksi">
+
+<select id="jenis">
+<option value="pemasukan">Pemasukan</option>
+<option value="pengeluaran">Pengeluaran</option>
+</select>
+
+<input type="number" id="jumlah" placeholder="Jumlah uang">
+
+<button onclick="tambahTransaksi()">Tambah Transaksi 🚀</button>
+</div>
+
+<div class="section">
+<h2>📝 Riwayat Transaksi</h2>
+<div id="riwayat"></div>
+</div>
+
+<div class="section">
+<h2>🎯 Target Tabungan</h2>
+<input type="number" id="targetInput" placeholder="Masukkan target tabungan">
+<button onclick="setTarget()">Set Target</button>
+
+<div class="progress">
+<div class="progress-bar" id="progress"></div>
+</div>
+
+<p id="targetText">Belum ada target</p>
+</div>
+
+<div class="section">
+<h2>📈 Grafik Keuangan</h2>
+<canvas id="chart"></canvas>
+</div>
+
+<div class="section">
+<h2>🤖 AI Assistant</h2>
+<input type="text" id="aiInput" placeholder="Tanya apa saja lalu tekan Enter" onkeyup="askAI(event)">
+<div class="ai-box" id="aiResponse">AI siap membantu ✨</div>
+</div>
+
+<div class="section">
+<h2>🐣 Virtual Pet</h2>
+<h1 id="pet">🥚</h1>
+<p id="petText">Pet Level 1</p>
+</div>
+
+<div class="section">
+<h2>🎡 Lucky Spin</h2>
+<button onclick="spinLucky()">SPIN HADIAH</button>
+<p id="spinText"></p>
+</div>
+
+<div class="section">
+<h2>🤖 AI Analisis Keuangan</h2>
+<div class="ai-box" id="financeAI">
+AI akan memberikan analisis pengeluaran otomatis ✨
+</div>
+<button onclick="analisaKeuangan()">Analisa Sekarang 🚀</button>
+</div>
+
+<div class="section">
+<h2>🎮 Achievement</h2>
+<div id="achievementBox">
+🏆 Belum ada achievement
+</div>
+</div>
+
+<div class="section">
+<h2>🌈 Pilih Tema</h2>
+<button onclick="themeGalaxy()">🌌 Galaxy</button>
+<button onclick="themeNeon()">💜 Neon</button>
+<button onclick="themeSakura()">🌸 Sakura</button>
+<button onclick="themeCyber()">🤖 Cyberpunk</button>
+</div>
+
+<div class="section">
+<h2>🛒 Wishlist Impian</h2>
+<input type="text" id="wishlistNama" placeholder="Contoh: iPhone 15">
+<input type="number" id="wishlistHarga" placeholder="Harga impian">
+<button onclick="tambahWishlist()">Tambah Wishlist ✨</button>
+<div id="wishlistBox"></div>
+</div>
+
+<div class="section">
+<h2>📤 Export Data</h2>
+<button onclick="window.print()">📄 Export PDF</button>
+<button onclick="downloadJSON()">💾 Backup Data</button>
+</div>
+
+<div class="section">
+<h2>☁️ Cloud Save Simulasi</h2>
+<p>💾 Data otomatis tersimpan di browser pengguna.</p>
+</div>
+
+<div class="section">
+<h2>📱 APK Ready</h2>
+<p>Aplikasi sudah mobile friendly dan siap dijadikan APK Android 🚀</p>
+</div>
+
+</div>
+
+<script>
+
+const API_KEY = 'AIzaSyD0N1n8Jyzh1LXGUZfmNSw-rUXLy5v20PM';
+
+let saldo = 0;
+let level = 1;
+let coin = 0;
+let target = 0;
+
+function notif(text){
+const n = document.getElementById('notif');
+n.innerHTML = text;
+n.style.display = 'block';
+
+setTimeout(()=>{
+n.style.display = 'none';
+},2500);
+}
+
+function updateUI(){
+
+document.getElementById('saldo').innerHTML =
+'Rp ' + saldo.toLocaleString('id-ID');
+
+document.getElementById('level').innerHTML = level;
+document.getElementById('coin').innerHTML = coin;
+
+if(target > 0){
+let persen = (saldo/target)*100;
+if(persen > 100) persen = 100;
+
+ document.getElementById('progress').style.width = persen + '%';
+ document.getElementById('targetText').innerHTML =
+ '🎯 ' + Math.floor(persen) + '% tercapai';
+}
+}
+
+function tambahXP(){
+coin += 5;
+
+if(coin >= 100){
+level++;
+coin = 0;
+notif('🚀 Level Naik!');
+}
+
+updatePet();
+updateUI();
+}
+
+function updatePet(){
+if(level >= 2){
+document.getElementById('pet').innerHTML = '🐣';
+document.getElementById('petText').innerHTML = 'Pet Level 2';
+}
+
+if(level >= 4){
+document.getElementById('pet').innerHTML = '🐥';
+document.getElementById('petText').innerHTML = 'Pet Level 4';
+}
+
+if(level >= 6){
+document.getElementById('pet').innerHTML = '🐤';
+document.getElementById('petText').innerHTML = 'Pet Level 6';
+}
+}
+
+function tambahTransaksi(){
+const nama = document.getElementById('nama').value;
+const jenis = document.getElementById('jenis').value;
+const jumlah = parseInt(document.getElementById('jumlah').value) || 0;
+
+if(!nama || jumlah <= 0){
+notif('Isi data dengan benar ❌');
+return;
+}
+
+if(jenis === 'pemasukan'){
+saldo += jumlah;
+}else{
+saldo -= jumlah;
+}
+
+const item = document.createElement('div');
+item.className = 'transaction';
+
+item.innerHTML = `
+<div>
+<b>${nama}</b><br>
+${jenis === 'pemasukan' ? '💰' : '💸'} Rp ${jumlah.toLocaleString('id-ID')}
+</div>
+<button onclick="hapus(this)">Hapus</button>
+`;
+
+document.getElementById('riwayat').prepend(item);
+
+chart.data.labels.push(nama);
+chart.data.datasets[0].data.push(saldo);
+chart.update();
+
+createMoney();
+tambahXP();
+updateUI();
+notif('Transaksi berhasil ditambahkan 🚀');
+}
+
+function hapus(btn){
+btn.parentElement.remove();
+}
+
+function setTarget(){
+target = parseInt(document.getElementById('targetInput').value) || 0;
+updateUI();
+notif('🎯 Target berhasil dibuat');
+}
+
+async function askAI(event){
+if(event.key === 'Enter'){
+
+const input = document.getElementById('aiInput').value;
+const responseBox = document.getElementById('aiResponse');
+
+responseBox.innerHTML = '⏳ AI sedang berpikir...';
+
+try{
+
+const response = await fetch(
+`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`,
+{
+method:'POST',
+headers:{
+'Content-Type':'application/json'
+},
+body:JSON.stringify({
+contents:[{
+parts:[{
+text:input
+}]
+}]
+})
+}
+);
+
+const data = await response.json();
+
+const text = data.candidates?.[0]?.content?.parts?.[0]?.text || 'AI tidak menemukan jawaban 😅';
+
+responseBox.innerHTML = text;
+
+}catch(error){
+console.error(error);
+responseBox.innerHTML = '❌ AI Error';
+}
+}
+}
+
+function spinLucky(){
+const hadiah = [
+'🪙 +20 Coin',
+'🚀 Level Up',
+'💰 Bonus Uang',
+'🎉 Jackpot'
+];
+
+const random = Math.floor(Math.random()*hadiah.length);
+const hasil = hadiah[random];
+
+document.getElementById('spinText').innerHTML = hasil;
+
+if(hasil.includes('Coin')){
+coin += 20;
+}
+
+if(hasil.includes('Level')){
+level++;
+}
+
+if(hasil.includes('Uang')){
+saldo += 50000;
+}
+
+updateUI();
+notif('🎡 Lucky Spin berhasil');
+}
+
+function analisaKeuangan(){
+let text = '🤖 AI ANALISIS:
+
+';
+
+if(saldo < 0){
+text += '⚠️ Pengeluaran lebih besar dari pemasukan. Kurangi pengeluaran tidak penting.';
+}else if(saldo < 500000){
+text += '💡 Saldo masih kecil, coba tingkatkan tabungan mingguan.';
+}else{
+text += '🚀 Keuangan kamu cukup sehat. Pertahankan kebiasaan baikmu!';
+}
+
+text += '
+
+🎯 Saran AI:
+- Sisihkan 20% pemasukan
+- Hindari pengeluaran impulsif
+- Buat target bulanan';
+
+document.getElementById('financeAI').innerHTML = text;
+}
+
+function checkAchievement(){
+let html = '';
+
+if(saldo >= 1000000){
+html += '🏆 Sultan Pertama — Saldo mencapai 1 juta<br>';
+}
+
+if(level >= 5){
+html += '🚀 Master Finance — Level 5 tercapai<br>';
+}
+
+if(coin >= 50){
+html += '🪙 Kolektor Coin — Mengumpulkan 50 coin<br>';
+}
+
+if(html === ''){
+html = '🏆 Belum ada achievement';
+}
+
+document.getElementById('achievementBox').innerHTML = html;
+}
+
+function themeGalaxy(){
+document.body.style.background = 'linear-gradient(135deg,#0f172a,#312e81,#1e1b4b)';
+}
+
+function themeNeon(){
+document.body.style.background = 'linear-gradient(135deg,#06b6d4,#7c3aed,#0f172a)';
+}
+
+function themeSakura(){
+document.body.style.background = 'linear-gradient(135deg,#f9a8d4,#fbcfe8,#fdf2f8)';
+}
+
+function themeCyber(){
+document.body.style.background = 'linear-gradient(135deg,#000000,#052e16,#164e63)';
+}
+
+function tambahWishlist(){
+const nama = document.getElementById('wishlistNama').value;
+const harga = parseInt(document.getElementById('wishlistHarga').value) || 0;
+
+if(!nama || harga <= 0){
+notif('Isi wishlist dengan benar ❌');
+return;
+}
+
+const div = document.createElement('div');
+div.className = 'transaction';
+
+let estimasi = 0;
+if(saldo > 0){
+estimasi = Math.ceil(harga / saldo);
+}
+
+ div.innerHTML = `
+ <div>
+ 🛒 <b>${nama}</b><br>
+ 💰 Rp ${harga.toLocaleString('id-ID')}<br>
+ ⏳ Estimasi tercapai: ${estimasi || '-'} bulan
+ </div>
+ `;
+
+ document.getElementById('wishlistBox').prepend(div);
+ notif('✨ Wishlist berhasil ditambahkan');
+}
+
+function downloadJSON(){
+const data = {
+ saldo,
+ level,
+ coin,
+ tanggal: new Date()
+};
+
+const blob = new Blob([JSON.stringify(data,null,2)],{
+type:'application/json'
+});
+
+const a = document.createElement('a');
+a.href = URL.createObjectURL(blob);
+a.download = 'finance-data.json';
+a.click();
+}
+
+
+function createMoney(){
+const money = document.createElement('div');
+money.classList.add('money');
+money.innerHTML = '💸';
+money.style.left = Math.random()*100 + 'vw';
+money.style.animationDuration = (Math.random()*3+2) + 's';
+
+document.body.appendChild(money);
+
+setTimeout(()=>{
+money.remove();
+},5000);
+}
+
+function toggleMode(){
+document.body.classList.toggle('light');
+}
+
+const ctx = document.getElementById('chart');
+
+const chart = new Chart(ctx,{
+type:'line',
+data:{
+labels:['Awal'],
+datasets:[{
+label:'Saldo',
+data:[0],
+borderWidth:3,
+fill:false
+}]
+},
+options:{
+responsive:true
+}
+});
+
+updateUI();
+
+</script>
+
+</div>
+
+<script>
+
+const APP_USERNAME = 'hemat221';
+const APP_PASSWORD = 'hemat221';
+
+function login(){
+const username = document.getElementById('username').value.trim();
+const password = document.getElementById('password').value.trim();
+
+if(username === APP_USERNAME && password === APP_PASSWORD){
+document.getElementById('loginPage').style.display = 'none';
+document.getElementById('app').style.display = 'block';
+}else{
+alert('Username atau password salah ❌');
+}
+}
+
+</script>
+
+</body>
  </html>gap:20px;
 margin-bottom:30px;
 }
